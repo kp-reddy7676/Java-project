@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+
+    tools {
+        // Automatically installs and configures Maven and JDK versions defined in Jenkins Global Tool Configuration
+        maven 'Maven 3.9'
+        jdk 'Java 21'
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                // Pulls your Java project from GitHub
+                git branch: 'main', url: 'https://github.com'
+            }
+        }
+
+        stage('Build & Test') {
+            steps {
+                // Compiles, runs tests, and packages your Java app into a JAR/WAR file
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Archive Artifacts') {
+            steps {
+                // Saves the generated JAR/WAR file in the Jenkins dashboard
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+            }
+        }
+    }
+}
+
+
+
+
+
+
